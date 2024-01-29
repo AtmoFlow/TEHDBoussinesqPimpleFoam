@@ -1,0 +1,21 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: download openfoam
+      run: curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
+    - name: install openfoam 
+      run: sudo apt-get install openfoam2312-default
+    - name: start openfoam and compile
+      run: openfoam2312 wmake
