@@ -13,9 +13,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: install openfoam
+    - name: download openfoam
       run: curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
+    - name: install openfoam 
       run: sudo apt-get install openfoam2312-default
+    - name: start openfoam 
       run: openfoam2312
     - name: compile
       run: wmake
