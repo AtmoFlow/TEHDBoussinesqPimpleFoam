@@ -17,7 +17,7 @@ jobs:
       run: curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
     - name: install openfoam 
       run: sudo apt-get install openfoam2312-default
-    - name: start openfoam 
-      run: openfoam2312
-    - name: compile
-      run: wmake
+    - name: start openfoam and compile
+      run: |
+        openfoam2312
+        make
