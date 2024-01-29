@@ -18,6 +18,4 @@ jobs:
     - name: install openfoam 
       run: sudo apt-get install openfoam2312-default
     - name: start openfoam and compile
-      run: |
-        openfoam2312
-        wmake
+      run: openfoam2312 wmake
