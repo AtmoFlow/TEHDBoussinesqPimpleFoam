@@ -1,0 +1,79 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+#include "$FOAM_CASE/initialConditions";
+
+
+dimensions      [ 0 0 0 1 0 0 0 ];
+
+internalField   uniform 293;
+
+boundaryField
+{
+    outer
+    {
+        type            codedFixedValue;
+        value           uniform 293;
+        name            cooledPoleTemp;
+        code            #{
+	const fvPatch& boundaryPatch = patch();
+	const vectorField& Cf = boundaryPatch.Cf();
+	scalarField& field = *this;
+
+	const scalar T_max=298;
+	const scalar T_min=293;
+	const scalar a_th=50;
+
+	forAll(Cf, faceI)
+	{
+		const scalar x = Cf[faceI].x();
+		const scalar y = Cf[faceI].y();
+		const scalar z = Cf[faceI].z();
+		const scalar magPos=sqrt(pow(x,2)+pow(y,2)+pow(z,2));
+                field[faceI]= T_min+(T_max-T_min)/2*(cosh(a_th*z/magPos)-cosh(a_th))/(1-cosh(a_th));
+	}
+
+#};
+    }
+    inner
+    {
+        type            codedFixedValue;
+        value           uniform 298;
+        name            heatedEquaTemp;
+        code            #{
+        const fvPatch& boundaryPatch = patch();
+        const vectorField& Cf = boundaryPatch.Cf();
+        scalarField& field = *this;
+
+        const scalar T_max=298;
+        const scalar T_min=293;
+        const scalar n=100;
+
+        forAll(Cf, faceI)
+        {
+                const scalar x = Cf[faceI].x();
+                const scalar y = Cf[faceI].y();
+                const scalar z = Cf[faceI].z();
+                const scalar magPos=sqrt(pow(x,2)+pow(y,2)+pow(z,2));
+                field[faceI]= (T_max+T_min)/2+(T_max-T_min)/2*pow(sin(acos(z/magPos)),n);
+        }
+
+#};
+    }
+}
+
+
+// ************************************************************************* //

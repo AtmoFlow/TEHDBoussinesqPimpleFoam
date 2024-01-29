@@ -1,0 +1,97 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  | =========                 |                                                 |
+  | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+  |  \\    /   O peration     | Version:  2012                                  |
+  |   \\  /    A nd           | Website:  www.openfoam.com                      |
+  |    \\/     M anipulation  |                                                 |
+  \*---------------------------------------------------------------------------*/
+FoamFile
+{
+	version     2.0;
+	format      ascii;
+	class       dictionary;
+	location    "system/Fluid";
+	object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+solvers
+{
+	"rho.*"
+	{
+		solver          PCG;
+		smoother        DICGaussSeidel;
+		preconditioner  FDIC;
+		tolerance       1e-9;
+		relTol          0.01;
+
+		//solver          diagonal;
+
+	}
+
+	"(p|p_rgh|Ue)"
+	{
+     solver          GAMG;
+        smoother        GaussSeidel;
+		tolerance       1e-7;
+		relTol          0.01;
+	}
+
+	"(p|Ue|p_rgh)Final"
+	{
+		$p_rgh;
+		tolerance	1e-6;
+		relTol          0;
+	}
+
+	"(U|T)"
+	{
+    solver          PBiCGStab;
+                preconditioner  DILU;
+		tolerance       1e-8;
+		relTol          0;
+	}
+
+	"(U|T)Final"
+	{
+		$T;
+		tolerance	1e-8;
+		relTol          0;
+	}
+
+}
+
+PIMPLE
+{
+	momentumPredictor no;
+	nOuterCorrectors	50;
+	nNonOrthogonalCorrectors 1;
+	nCorrectors       1;
+	#include "$FOAM_CASE/initialConditions";
+        pRefPoint       (#eval"-sqrt(2)/2*0.027/$d" #eval"-sqrt(2)/2*0.027/$d" 0);
+	pRefValue 	$pInitial;
+	solveqEL no;	
+	solveqEk no;
+	residualControl
+	{
+		"(T|p_rgh|Ue)"
+		{
+			relTol          0;
+			tolerance       1e-3;
+		}
+	}
+
+}
+
+relaxationFactors
+{
+	fields
+	{
+				p_rgh 0.8;
+	}
+	equations
+	{
+        U		0.95;
+	T		0.8;
+	}
+}
+// ************************************************************************* //

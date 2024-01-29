@@ -1,0 +1,28 @@
+/*--------------------------------*- C++ -*----------------------------------*  =========                 |
+  \      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \    /   O peration     | Website:  https://openfoam.org
+    \  /    A nd           | Version:  7
+     \/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+DeltaT          5;
+Vrms         	1500;
+d		0.0081;
+
+kappa		4.5139e-8;
+
+omega2          #eval"2*pi()*0";
+
+omega		$omega2;
+
+pInitial	0;
+
+// ************************************************************************* //
