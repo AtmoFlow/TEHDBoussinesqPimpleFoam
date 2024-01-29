@@ -1,5 +1,4 @@
-name: C/C++ CI
-
+name: Build solver
 on:
   push:
     branches: [ "main" ]
