@@ -20,4 +20,4 @@ jobs:
     - name: start openfoam and compile
       run: |
         openfoam2312
-        make
+        wmake
