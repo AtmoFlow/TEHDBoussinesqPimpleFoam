@@ -1,3 +1,5 @@
+![example workflow](https://github.com/AtmoFlow/TEHDBoussinesqPimpleFoam/actions/workflows/build-OF.yml/badge.svg)
+
 TEHDBoussinesqPimpleFoam is a solver developed for OpenFOAM, a powerful open-source computational fluid dynamics (CFD) software. This solver is specifically designed to handle thermo-electro-hydrodynamic problems, providing a comprehensive toolset for simulating complex interactions between thermal, electrical, and fluidic phenomena.
 Features in incompressible flows. It has the ability to solve also in a non-dimensional way
 
