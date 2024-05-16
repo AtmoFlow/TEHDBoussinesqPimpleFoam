@@ -9,7 +9,6 @@ dimensionedScalar epsilonr0("epsilonr0", dimless, laminarTransport);
 // Thermal permetivity expansion coefficient [1/K]
 dimensionedScalar e("e",dimless/dimTemperature,laminarTransport);
 
-
 // Reference temperature [K]
 dimensionedScalar TRef("TRef", dimTemperature, laminarTransport);
 
@@ -21,32 +20,26 @@ dimensionedScalar Prt("Prt", dimless, laminarTransport);
 
 dimensionedScalar kappa("kappa", dimensionSet(0, 2, -1, 0, 0, 0,0), laminarTransport);
 
-//Get boundary condition for dimless calculation
-dimensionedScalar DeltaT("DeltaT", dimensionSet(0, 0, 0, 1, 0, 0,0), laminarTransport);
-dimensionedScalar Vrms("Vrms", dimensionSet(1, 2, -3, 0, 0, -1,0), laminarTransport);
-dimensionedScalar d("d", dimensionSet(0, 1, 0, 0, 0, 0,0), laminarTransport);
-
-dimensionedScalar omega("omega", dimensionSet(0, 0, -1, 0, 0, 0,0) , laminarTransport);
+dimensionedScalar omega=laminarTransport.getOrDefault<dimensionedScalar>("omega", dimensionedScalar("fDEPscaling",  dimensionSet(0, 0, -1, 0, 0, 0,0),0));
 
 //Set the scaling for dimless calculation
-dimensionedScalar fDEPscaling("fDEPscaling",  dimensionSet(-2, 0, 4, -1, 0, 2,0), Foam::constant::electromagnetic::epsilon0.value()*epsilonr0.value()*e.value()*DeltaT.value()*pow(Vrms.value(),2)/(2*pow(kappa.value(),2)*rho0.value()));
+dimensionedScalar fDEPscaling("fDEPscaling",  dimensionSet(-2, 0, 4, -1, 0, 2,0), 0);
 
-dimensionedScalar fC1scaling("fC1scaling", dimensionSet(0, 0, 0, 0, 0, 0,0), pow(omega.value(),2)*pow(d.value(),4)/pow(kappa.value(),2));
-dimensionedScalar fC2scaling("fC2scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), pow(omega.value(),2)*pow(d.value(),4)*beta.value()*DeltaT.value()/pow(kappa.value(),2));
-dimensionedScalar fC3scaling("fC3scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), beta.value()*DeltaT.value());
+dimensionedScalar fC1scaling("fC1scaling", dimensionSet(0, 0, 0, 0, 0, 0,0), 0);
+dimensionedScalar fC2scaling("fC2scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), 0);
+dimensionedScalar fC3scaling("fC3scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), 0);
 
-dimensionedScalar fCorio1scaling("fCorio1scaling", dimensionSet(0, 0, 0, 0, 0, 0,0), omega.value()*pow(d.value(),2)/kappa.value());
-dimensionedScalar fCorio2scaling("fCorio2scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), omega.value()*pow(d.value(),2)*beta.value()*DeltaT.value()/kappa.value());
+dimensionedScalar fCorio1scaling("fCorio1scaling", dimensionSet(0, 0, 0, 0, 0, 0,0), 0);
+dimensionedScalar fCorio2scaling("fCorio2scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), 0);
 
-
-dimensionedScalar fUe1scaling("fUe1scaling", dimensionSet(0, 0, 0, 0, 0, 0,0), 1);
-dimensionedScalar fUe2scaling("fUe2scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), e.value()*DeltaT.value());
+dimensionedScalar fUe1scaling("fUe1scaling", dimensionSet(0, 0, 0, 0, 0, 0,0), 0);
+dimensionedScalar fUe2scaling("fUe2scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), 0);
 
 dimensionedScalar dielectricHeatConst("dielectricHeatConst", dimensionSet(-2, -2, 5, 1, 0, 2,0), 0);
 
 bool bDielHeat = laminarTransport.getOrDefault<bool>("dielectricHeat", false);
 
-dimensionedScalar dielHeatScaling("dielHeatScaling",dimless,pow(Vrms.value(),2)/(kappa.value()*DeltaT.value()));
+dimensionedScalar dielHeatScaling("dielHeatScaling",dimless,0);
 
 if(bDielHeat){
 Info<<"Added dielectric heating  \n"<<nl;
@@ -62,6 +55,28 @@ bool bSolveDimless = laminarTransport.getOrDefault<bool>("solveDimless", false);
 
 if(bSolveDimless)
 {
+dimensionedScalar kappa("kappa", dimensionSet(0, 2, -1, 0, 0, 0,0), laminarTransport);
+
+//Get boundary condition for dimless calculation
+dimensionedScalar DeltaT("DeltaT", dimensionSet(0, 0, 0, 1, 0, 0,0), laminarTransport);
+dimensionedScalar Vrms("Vrms", dimensionSet(1, 2, -3, 0, 0, -1,0), laminarTransport);
+dimensionedScalar d("d", dimensionSet(0, 1, 0, 0, 0, 0,0), laminarTransport);
+
+//Set the scaling for dimless calculation
+fDEPscaling=dimensionedScalar("fDEPscaling",  dimensionSet(-2, 0, 4, -1, 0, 2,0), Foam::constant::electromagnetic::epsilon0.value()*epsilonr0.value()*e.value()*DeltaT.value()*pow(Vrms.value(),2)/(2*pow(kappa.value(),2)*rho0.value()));
+
+fC1scaling=dimensionedScalar("fC1scaling", dimensionSet(0, 0, 0, 0, 0, 0,0), pow(omega.value(),2)*pow(d.value(),4)/pow(kappa.value(),2));
+fC2scaling=dimensionedScalar("fC2scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), pow(omega.value(),2)*pow(d.value(),4)*beta.value()*DeltaT.value()/pow(kappa.value(),2));
+fC3scaling=dimensionedScalar("fC3scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), beta.value()*DeltaT.value());
+
+fCorio1scaling=dimensionedScalar("fCorio1scaling", dimensionSet(0, 0, 0, 0, 0, 0,0), omega.value()*pow(d.value(),2)/kappa.value());
+fCorio2scaling=dimensionedScalar("fCorio2scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), omega.value()*pow(d.value(),2)*beta.value()*DeltaT.value()/kappa.value());
+
+fUe1scaling=dimensionedScalar("fUe1scaling", dimensionSet(0, 0, 0, 0, 0, 0,0), 1);
+fUe2scaling=dimensionedScalar("fUe2scaling", dimensionSet(0, 0, 0, -1, 0, 0,0), e.value()*DeltaT.value());
+
+dielHeatScaling=dimensionedScalar("dielHeatScaling",dimless,pow(Vrms.value(),2)/(kappa.value()*DeltaT.value()));
+
 Info<<"Calculate dimensionless read scaling quantities. Note all other quantities need to be 1"<<nl;
 if(omega.value()!=0){
 omega=dimensionedScalar("omega", dimensionSet(0, 0, -1, 0, 0, 0,0) , 1);
