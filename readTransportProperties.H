@@ -18,8 +18,6 @@ dimensionedScalar Pr("Pr", dimless, laminarTransport);
 // Turbulent Prandtl number
 dimensionedScalar Prt("Prt", dimless, laminarTransport);
 
-dimensionedScalar kappa("kappa", dimensionSet(0, 2, -1, 0, 0, 0,0), laminarTransport);
-
 dimensionedScalar omega=laminarTransport.getOrDefault<dimensionedScalar>("omega", dimensionedScalar("fDEPscaling",  dimensionSet(0, 0, -1, 0, 0, 0,0),0));
 
 //Set the scaling for dimless calculation
@@ -101,7 +99,6 @@ Info<<"Calculate dimension quantities"<<nl;
 dimensionedVector Romega("Romega", dimensionSet(0, 0, -1, 0, 0, 0,0) , vector(0,0,omega.value()));
 
 Info<< laminarTransport.nu()  <<nl;
-Info<< kappa <<nl;
 Info<< rho0 <<nl;
 Info<< beta <<nl;
 Info<< epsilonr0 <<nl;
