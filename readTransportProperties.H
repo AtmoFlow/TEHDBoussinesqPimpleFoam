@@ -18,7 +18,7 @@ dimensionedScalar Pr("Pr", dimless, laminarTransport);
 // Turbulent Prandtl number
 dimensionedScalar Prt("Prt", dimless, laminarTransport);
 
-dimensionedScalar omega=laminarTransport.getOrDefault<dimensionedScalar>("omega", dimensionedScalar("fDEPscaling",  dimensionSet(0, 0, -1, 0, 0, 0,0),0));
+dimensionedScalar omega(dimensionedScalar::getOrDefault("omega", laminarTransport, dimensionSet(0, 0, -1, 0, 0, 0, 0), 0));
 
 //Set the scaling for dimless calculation
 dimensionedScalar fDEPscaling("fDEPscaling",  dimensionSet(-2, 0, 4, -1, 0, 2,0), 0);
