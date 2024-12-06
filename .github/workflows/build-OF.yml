@@ -1,20 +1,20 @@
-name: Build solver
+name: Build with OpenFOAM v2406
 on:
   push:
-    branches: [ "main" ]
+    paths-ignore:
+      - 'README.md'
   pull_request:
-    branches: [ "main" ]
-
+    paths-ignore:
+      - 'README.md'
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: download openfoam
-      run: curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
-    - name: install openfoam 
-      run: sudo apt-get install openfoam2312-default
-    - name: start openfoam and compile
-      run: openfoam2312 wmake
+    - name: Check out repository
+      uses: actions/checkout@v4
+    - name: Set up OpenFOAM
+      uses: gerlero/setup-openfoam@v1
+      with:
+        openfoam-version: 2406
+    - name: Build OpenFOAM  TEHDBoussinesqPimpleFoam
+      run: ./Allwmake
