@@ -115,4 +115,10 @@ Info<< fCorio2scaling<<nl;
 Info<< fUe1scaling <<nl;
 Info<< fUe2scaling <<nl;
 Info<< dielHeatScaling<<nl;
-Info<< dielectricHeatConst<<nl;
+Info<< dielectricHeatConst<<nl<<nl;
+
+Info<<"Ra_E="<< fDEPscaling.value()/Pr.value() <<nl;
+Info<<"Ta="<< fC1scaling.value()*4*pow(Pr.value(),-2) <<nl;
+if (dielHeatScaling.value()*dielectricHeatConst.value()>0){
+Info<<"Ra_T="<< fDEPscaling.value()/Pr.value()/(dielHeatScaling.value()*dielectricHeatConst.value()) <<nl;
+}
