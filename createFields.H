@@ -52,63 +52,6 @@ autoPtr<incompressible::turbulenceModel> turbulence
     incompressible::turbulenceModel::New(U, phi, laminarTransport)
 );
 
-// Kinematic density for buoyancy force
-volScalarField rhok
-(
-    IOobject
-    (
-        "rhok",
-        runTime.timeName(),
-        mesh
-    ),
-    1.0 - beta*(T - TRef)
-);
-
-// Kinematic density for buoyancy force
-volScalarField rho
-(       
-        IOobject
-                (
-                "rho",
-                runTime.timeName(),
-                mesh,
-                IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-        ),
-    rho0*(1.0 - beta*(T - TRef))
-);
-
-Info<<"fC" << endl;
-volVectorField fC
-(        
-         IOobject
-          ( 
-            "fC",
-            runTime.timeName(),
-            mesh,
-            IOobject::READ_IF_PRESENT,
-            IOobject::AUTO_WRITE
-            ),
-            mesh,
-        dimensionedVector("fC",dimensionSet(0, 1, -2, 0, 0, 0, 0),vector(0, 0, 0))
-);
-
-Info<<"fCorio" << endl;
-volVectorField fCorio
-(
-         IOobject
-          (
-            "fCorio",
-            runTime.timeName(),
-            mesh,
-            IOobject::READ_IF_PRESENT,
-            IOobject::AUTO_WRITE
-            ),
-            mesh,
-        dimensionedVector("fCorio",dimensionSet(0, 1, -2, 0, 0, 0, 0),vector(0, 0, 0))
-);
-
-
 // kinematic turbulent thermal thermal conductivity m2/s
 Info<< "Reading field alphat\n" << endl;
 volScalarField alphat
@@ -138,22 +81,6 @@ volScalarField Ue
     ),
     mesh,
     dimensionedScalar("Ue",dimensionSet(1, 2, -3, 0, 0, -1,0), 0.0)
-);
-
-Info<< "Reading field epsilonr\n" << endl;
-volScalarField epsilonr
-(       
-        IOobject
-                (
-                "epsilonr",
-                runTime.timeName(),
-                mesh,
-                IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-        ),
-        //mesh,
-    //dimensionedScalar("epsilonr",dimensionSet(0, 0, 0, 0, 0, 0,0), 0.0)
-	    epsilonr0*(1.0 - e*(T - TRef))
 );
 
 Info<<"fDEP" << endl;
@@ -187,7 +114,7 @@ volScalarField p
         IOobject::NO_READ,
         IOobject::AUTO_WRITE
     ),
-    p_rgh + rhok*gh
+    p_rgh 
 );
 
 label pRefCell = 0;

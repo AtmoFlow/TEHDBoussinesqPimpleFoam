@@ -9,8 +9,6 @@ MRF.correctBoundaryVelocity(U);
 	 + turbulence->divDevReff(U)
 	 ==
 	 fDEP
-	 - fC
-	 - fCorio
 	 + fvOptions(U)
 	);
 
@@ -27,7 +25,6 @@ if (pimple.momentumPredictor())
 		 fvc::reconstruct
 		 (
 		  (
-		   - ghf*fvc::snGrad(rhok)
 		   - fvc::snGrad(p_rgh)
 		  )*mesh.magSf()
 		 )
@@ -36,19 +33,3 @@ if (pimple.momentumPredictor())
 	fvOptions.correct(U);
 }
 
-
-if(!bSolveDimless)
-{
-	fC = (Romega ^ ((Romega) ^ (mesh.C() ))) - beta*(T-TRef)*(
-			(Romega ^ ((Romega) ^ (mesh.C() )))+
-			((U^mesh.C())^((U^mesh.C())^mesh.C()))/(magSqr(magSqr(mesh.C())))
-			);
-	fCorio = 2.0 * (Romega ^ U) ;
-}else{
-	fC = 
-		fC1scaling*(Romega ^ ((Romega) ^ (mesh.C() )))-T*(
-				fC2scaling*(Romega ^ ((Romega) ^ (mesh.C()))) +
-				fC3scaling*((U^mesh.C())^((U^mesh.C())^mesh.C()))/(magSqr(magSqr(mesh.C())))
-				);
-	fCorio = fCorio1scaling*2.0 * (Romega ^ U) ;
-}
